@@ -59,24 +59,35 @@ def AProductInfo():
     return render_template('AProductInfo.html', data=data)
 
 
+# @app.route("/adminlogin", methods=['GET', 'POST'])
+# def adminlogin():
+#     if request.method == 'POST':
+#         if request.form['uname'] == 'admin' or request.form['password'] == 'admin':
+#             return redirect("/AdminHome")
+#
+#             # conn = mysql.connector.connect(user='root', password='', host='localhost', database='1virtualtryondb')
+#             # cur = conn.cursor()
+#             # cur.execute("SELECT * FROM regtb ")
+#             # userdata = cur.fetchall()
+#             # cur.execute("select * from protb")
+#             # productdata = cur.fetchall()
+#             # cur.execute("select * from booktb")
+#             # bookingdata = cur.fetchall()
+#             # data = {"userdata": userdata, "productdata": productdata, "bookingdata": bookingdata}
+#             flash("Login successfully")
+#             return render_template('AdminHome.html', data=data)
+#
+#         else:
+#             flash("UserName Or Password Incorrect!")
+#             return render_template('AdminLogin.html')
+
 @app.route("/adminlogin", methods=['GET', 'POST'])
 def adminlogin():
     if request.method == 'POST':
-        if request.form['uname'] == 'admin' or request.form['password'] == 'admin':
-            return redirect("/AdminHome")
-
-            # conn = mysql.connector.connect(user='root', password='', host='localhost', database='1virtualtryondb')
-            # cur = conn.cursor()
-            # cur.execute("SELECT * FROM regtb ")
-            # userdata = cur.fetchall()
-            # cur.execute("select * from protb")
-            # productdata = cur.fetchall()
-            # cur.execute("select * from booktb")
-            # bookingdata = cur.fetchall()
-            # data = {"userdata": userdata, "productdata": productdata, "bookingdata": bookingdata}
+        if request.form['uname'] == 'admin' and request.form['password'] == 'admin':
+            session['uname'] = 'admin'   # ✅ THIS is what was missing
             flash("Login successfully")
-            return render_template('AdminHome.html', data=data)
-
+            return redirect("/AdminHome")
         else:
             flash("UserName Or Password Incorrect!")
             return render_template('AdminLogin.html')
@@ -887,20 +898,42 @@ def BookInfo():
     return render_template('UserBook.html', data1=data1, data2=data2)
 
 
+# @app.route("/ABookInfo")
+# def ABookInfo():
+#     uname = session['uname']
+#
+#
+#     conn = mysql.connector.connect(user='root', password='', host='localhost', database='1virtualtryondb')
+#     cur = conn.cursor()
+#     cur.execute("SELECT * FROM  carttb where UserName='" + uname + "' and Status='1' ")
+#     data1 = cur.fetchall()
+#
+#     conn = mysql.connector.connect(user='root', password='', host='localhost', database='1virtualtryondb')
+#     cur = conn.cursor()
+#     cur.execute("SELECT * FROM  booktb where username='" + uname + "'")
+#     data2 = cur.fetchall()
+#
+#     return render_template('ABookInfo.html', data1=data1, data2=data2)
+
 @app.route("/ABookInfo")
 def ABookInfo():
-    uname = session['uname']
+    if not session.get('uname'):
+        flash("Please login first!")
+        return redirect("/AdminLogin")
 
-    conn = mysql.connector.connect(user='root', password='', host='localhost', database='1virtualtryondb')
+    conn = mysql.connector.connect(user='root', password='',
+                                   host='localhost', database='1virtualtryondb')
     cur = conn.cursor()
-    cur.execute("SELECT * FROM  carttb where UserName='" + uname + "' and Status='1' ")
+
+    # ✅ No WHERE filter — get ALL users' orders
+    cur.execute("SELECT * FROM carttb WHERE Status='1'")
     data1 = cur.fetchall()
 
-    conn = mysql.connector.connect(user='root', password='', host='localhost', database='1virtualtryondb')
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM  booktb where username='" + uname + "'")
+    # ✅ No WHERE filter — get ALL users' bookings
+    cur.execute("SELECT * FROM booktb")
     data2 = cur.fetchall()
 
+    conn.close()
     return render_template('ABookInfo.html', data1=data1, data2=data2)
 
 @app.route("/ASalesInfo")
