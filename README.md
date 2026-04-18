@@ -1,9 +1,9 @@
-# 👕 AI-Powered Virtual Try-On System
+#  AI-Powered Virtual Try-On System
 
 ## 📌 Overview
 
-This project is an AI-based virtual try-on system that allows users to try clothes digitally in real time using computer vision.
-
+The AI-Powered Virtual Try-On System is a real-time computer vision application that allows users to virtually try on clothing, caps, and jewellery using their webcam.
+It uses pose detection and object overlay techniques to align items with the user’s body and face dynamically.
 ## 🚀 Features
 
 * Real-time virtual try-on
