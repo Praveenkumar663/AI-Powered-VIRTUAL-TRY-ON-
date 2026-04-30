@@ -18,13 +18,6 @@ It uses pose detection and object overlay techniques to align items with the use
 * MediaPipe
 * NumPy
 
-## 📂 Project Structure
-
-* `main.py` – Main application
-* `Resources/` – Clothing assets
-* `requirements.txt` – Dependencies
-
-
 ## ⚠️ Note
 
 Make sure your webcam is connected.
